@@ -54,6 +54,9 @@ public class BankSampah {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idBankSampah")
     private Set<Member> members = new HashSet<Member>(0);
 
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idBankSampah")
+    private Set<Kegiatan> kegiatans = new HashSet<Kegiatan>(0);
+
     // Constructor
     public BankSampah() {
     }

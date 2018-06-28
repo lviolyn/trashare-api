@@ -1,5 +1,6 @@
 package com.umn.ac.id.trashare.beans;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.persistence.*;
@@ -79,6 +80,7 @@ public class Kegiatan {
         return tanggalKegiatan;
     }
 
+    @JsonIgnore
     public BankSampah getIdBankSampah() { return idBankSampah; }
 
 }
