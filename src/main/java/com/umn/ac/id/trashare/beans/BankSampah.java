@@ -1,16 +1,20 @@
 package com.umn.ac.id.trashare.beans;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.springframework.boot.autoconfigure.web.ResourceProperties;
 
 import javax.persistence.*;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 @Entity
 @JsonIgnoreProperties({"hibernateLazyInitializer","handler","password","salt"})
 @Table(name = "bank_sampah")
 public class BankSampah {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_bank_sampah")
     private int idBankSampah;
 
@@ -46,6 +50,9 @@ public class BankSampah {
 
     @Column(name = "foto_profil")
     private String fotoProfil;
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idBankSampah")
+    private Set<Member> members = new HashSet<Member>(0);
 
     // Constructor
     public BankSampah() {
@@ -114,6 +121,10 @@ public class BankSampah {
         this.fotoProfil = fotoProfil;
     }
 
+    public void setMembers(Set<Member> members) {
+        this.members = members;
+    }
+
     // Getter
     public int getIdBankSampah() {
         return idBankSampah;
@@ -162,4 +173,14 @@ public class BankSampah {
     public String getFotoProfil() {
         return fotoProfil;
     }
+
+    //@JsonIgnore
+    public Set<Member> getMembers() {
+        return members;
+    }
+
+    /*@OneToMany(targetEntity = Member.class, mappedBy = "idBankSampah", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    public List<Member> getMembers() {
+        return members;
+    }*/
 }

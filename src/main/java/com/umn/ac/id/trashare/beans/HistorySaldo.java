@@ -10,7 +10,7 @@ import java.util.Date;
 @Table(name = "history_saldo")
 public class HistorySaldo {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_history_saldo")
     private int idHistorySaldo;
 

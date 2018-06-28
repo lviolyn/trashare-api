@@ -1,5 +1,6 @@
 package com.umn.ac.id.trashare.beans;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.persistence.*;
@@ -9,7 +10,7 @@ import javax.persistence.*;
 @Table(name = "member")
 public class Member {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_member")
     private int idMember;
 
@@ -47,7 +48,7 @@ public class Member {
     private String fotoIdentitas;
 
     // Banyak BS cuma bisa ke 1 member (1 member terdaftar di 1 BS)
-    @ManyToOne(targetEntity = BankSampah.class)
+    @ManyToOne(targetEntity = BankSampah.class, cascade = CascadeType.ALL)
     @JoinColumn(name = "id_bank_sampah", nullable = false, referencedColumnName = "id_bank_sampah")
     private BankSampah idBankSampah;
 
@@ -172,6 +173,7 @@ public class Member {
         return fotoIdentitas;
     }
 
+    @JsonIgnore
     public BankSampah getIdBankSampah() {
         return idBankSampah;
     }

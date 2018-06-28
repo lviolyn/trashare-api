@@ -33,6 +33,14 @@ public class MemberController {
         return memberRepository.getOne(idMember);
     }
 
+
+//    @GetMapping("/member/{id}/bank-sampah")
+//    public BankSampah getIdBankSampah(@PathVariable String id){
+//        int idMember = Integer.parseInt(id);
+//        Member member = memberRepository.getOne(idMember);
+//        return bankSampahRepository.findBankSampahById(member);
+//    }
+
     @PostMapping("/member")
     public Member createMember(@RequestBody Map<String, String> body){
         String namaLengkap = body.get("namaLengkap");
