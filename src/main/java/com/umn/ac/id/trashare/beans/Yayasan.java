@@ -34,6 +34,7 @@ public class Yayasan {
     @Column(name = "foto_profil")
     private String fotoProfil;
 
+
     // Banyak BS dimiliki 1 yayasan. 1 yayasan punya banyak BS
     @ManyToOne(targetEntity = BankSampah.class)
     @JoinColumn(name = "id_bank_sampah", nullable = false, referencedColumnName = "id_bank_sampah")

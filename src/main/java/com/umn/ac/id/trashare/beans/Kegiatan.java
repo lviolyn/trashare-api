@@ -26,7 +26,7 @@ public class Kegiatan {
     @Column(name = "tanggal_kegiatan")
     private Date tanggalKegiatan;
 
-    // Banyak kegiatan bisa dimiliki 1 BS. 1 kegiatan cuma miliknya 1 BS
+    // Banyak (Kegiatan) ke 1 BS --> 1 BS punya > 1 Kegiatan
     @ManyToOne(targetEntity = BankSampah.class)
     @JoinColumn(name = "id_bank_sampah", nullable = false, referencedColumnName = "id_bank_sampah")
     private BankSampah idBankSampah;
@@ -80,6 +80,7 @@ public class Kegiatan {
         return tanggalKegiatan;
     }
 
+    // Gak bisa lihat kegiatan itu punyanya BS mana
     @JsonIgnore
     public BankSampah getIdBankSampah() { return idBankSampah; }
 

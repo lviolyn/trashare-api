@@ -47,7 +47,7 @@ public class Member {
     @Column(name = "foto_identitas")
     private String fotoIdentitas;
 
-    // Banyak BS cuma bisa ke 1 member (1 member terdaftar di 1 BS)
+    // Banyak (BS) ke satu (Member) --> 1 BS bisa terdaftar di banyak member
     @ManyToOne(targetEntity = BankSampah.class, cascade = CascadeType.ALL)
     @JoinColumn(name = "id_bank_sampah", nullable = false, referencedColumnName = "id_bank_sampah")
     private BankSampah idBankSampah;
@@ -173,6 +173,7 @@ public class Member {
         return fotoIdentitas;
     }
 
+    // Kalau gini, di member gak ada data dia di BS mana
     @JsonIgnore
     public BankSampah getIdBankSampah() {
         return idBankSampah;

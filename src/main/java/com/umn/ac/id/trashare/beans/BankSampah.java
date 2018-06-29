@@ -128,6 +128,10 @@ public class BankSampah {
         this.members = members;
     }
 
+    public void setKegiatans(Set<Kegiatan> kegiatans) {
+        this.kegiatans = kegiatans;
+    }
+
     // Getter
     public int getIdBankSampah() {
         return idBankSampah;
@@ -177,13 +181,13 @@ public class BankSampah {
         return fotoProfil;
     }
 
-    //@JsonIgnore
+    // Bank Sampah tau dia punya member siapa aja
     public Set<Member> getMembers() {
         return members;
     }
 
-    /*@OneToMany(targetEntity = Member.class, mappedBy = "idBankSampah", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    public List<Member> getMembers() {
-        return members;
-    }*/
+    // Bank Sampah tau dia punya event apa aja
+    public Set<Kegiatan> getKegiatans() {
+        return kegiatans;
+    }
 }
