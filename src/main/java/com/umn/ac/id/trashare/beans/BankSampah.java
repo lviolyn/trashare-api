@@ -51,6 +51,11 @@ public class BankSampah {
     @Column(name = "foto_profil")
     private String fotoProfil;
 
+    // Banyak (Yayasan) ke 1 BS --> Banyak BS dimiliki 1 Yayasan
+    @ManyToOne(targetEntity = Yayasan.class)
+    @JoinColumn(name = "id_yayasan", nullable = false, referencedColumnName = "id_yayasan")
+    private Yayasan idYayasan;
+
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idBankSampah")
     private Set<Member> members = new HashSet<Member>(0);
 
@@ -61,7 +66,7 @@ public class BankSampah {
     public BankSampah() {
     }
 
-    public BankSampah(String namaBankSampah, String namaKetua, String alamat, String wilayah, String noTelp, String email, String deskripsiBankSampah, String password, String salt, String sessionToken, String fotoProfil) {
+    public BankSampah(String namaBankSampah, String namaKetua, String alamat, String wilayah, String noTelp, String email, String deskripsiBankSampah, String password, String salt, String sessionToken, String fotoProfil, Yayasan idYayasan) {
         this.namaBankSampah = namaBankSampah;
         this.namaKetua = namaKetua;
         this.alamat = alamat;
@@ -73,6 +78,7 @@ public class BankSampah {
         this.salt = salt;
         this.sessionToken = sessionToken;
         this.fotoProfil = fotoProfil;
+        this.idYayasan = idYayasan;
     }
 
     // Setter
@@ -122,6 +128,10 @@ public class BankSampah {
 
     public void setFotoProfil(String fotoProfil) {
         this.fotoProfil = fotoProfil;
+    }
+
+    public void setIdYayasan(Yayasan idYayasan) {
+        this.idYayasan = idYayasan;
     }
 
     public void setMembers(Set<Member> members) {
@@ -179,6 +189,12 @@ public class BankSampah {
 
     public String getFotoProfil() {
         return fotoProfil;
+    }
+
+    // Bank sampah gak bisa tau Yayasan dia apa
+    @JsonIgnore
+    public Yayasan getIdYayasan() {
+        return idYayasan;
     }
 
     // Bank Sampah tau dia punya member siapa aja

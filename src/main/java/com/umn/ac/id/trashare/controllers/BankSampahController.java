@@ -1,17 +1,28 @@
 package com.umn.ac.id.trashare.controllers;
 
 import com.umn.ac.id.trashare.beans.BankSampah;
+import com.umn.ac.id.trashare.beans.Yayasan;
 import com.umn.ac.id.trashare.repositories.BankSampahRepository;
+import com.umn.ac.id.trashare.repositories.YayasanRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.swing.*;
 import java.util.List;
 import java.util.Map;
 
 @RestController
 public class BankSampahController {
+
+    private final BankSampahRepository bankSampahRepository;
+    private final YayasanRepository yayasanRepository;
+
     @Autowired
-    BankSampahRepository bankSampahRepository;
+    public BankSampahController(BankSampahRepository bankSampahRepository, YayasanRepository yayasanRepository){
+        this.bankSampahRepository = bankSampahRepository;
+        this.yayasanRepository = yayasanRepository;
+    }
 
     @GetMapping("/bank-sampah")
     public List<BankSampah> getAllBankSampah(){
@@ -37,7 +48,9 @@ public class BankSampahController {
         String salt = body.get("salt");
         String sessionToken = body.get("sessionToken");
         String fotoProfil = body.get("fotoProfil");
-        return bankSampahRepository.save(new BankSampah(namaBankSampah, namaKetua, alamat, wilayah, noTelp, email, deskripsiBankSampah, password, salt, sessionToken, fotoProfil));
+        int idYayasan = Integer.parseInt(body.get("idYayasan"));
+        Yayasan ys = yayasanRepository.getOne(idYayasan);
+        return bankSampahRepository.save(new BankSampah(namaBankSampah, namaKetua, alamat, wilayah, noTelp, email, deskripsiBankSampah, password, salt, sessionToken, fotoProfil, ys));
     }
 
     @PutMapping("/bank-sampah/{id}")
@@ -54,6 +67,9 @@ public class BankSampahController {
         bankSampah.setPassword(body.get("password"));
         bankSampah.setSalt(body.get("salt"));
         bankSampah.setFotoProfil(body.get("fotoProfil"));
+        int idYayasan = Integer.parseInt(body.get("idYayasan"));
+        Yayasan ys = yayasanRepository.getOne(idYayasan);
+        bankSampah.setIdYayasan(ys);
         return bankSampahRepository.save(bankSampah);
     }
 

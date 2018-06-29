@@ -12,14 +12,8 @@ import java.util.Map;
 
 @RestController
 public class YayasanController {
-    private final YayasanRepository yayasanRepository;
-    private final BankSampahRepository bankSampahRepository;
-
     @Autowired
-    public YayasanController(YayasanRepository yayasanRepository, BankSampahRepository bankSampahRepository){
-        this.yayasanRepository = yayasanRepository;
-        this.bankSampahRepository = bankSampahRepository;
-    }
+    YayasanRepository yayasanRepository;
 
     @GetMapping("/yayasan")
     public List<Yayasan> getAllYayasan(){
@@ -41,9 +35,7 @@ public class YayasanController {
         String salt = body.get("salt");
         String sessionToken = body.get("sessionToken");
         String fotoProfil = body.get("fotoProfil");
-        int idBankSampah = Integer.parseInt(body.get("idBankSampah"));
-        BankSampah bs = bankSampahRepository.getOne(idBankSampah);
-        return yayasanRepository.save(new Yayasan(namaYayasan, email, noTelp, password, salt, sessionToken, fotoProfil, bs));
+        return yayasanRepository.save(new Yayasan(namaYayasan, email, noTelp, password, salt, sessionToken, fotoProfil));
     }
 
     @PutMapping("/yayasan/{id}")
@@ -56,9 +48,6 @@ public class YayasanController {
         yayasan.setPassword(body.get("password"));
         yayasan.setSalt(body.get("salt"));
         yayasan.setFotoProfil(body.get("fotoProfil"));
-        int idBankSampah = Integer.parseInt(body.get("idBankSampah"));
-        BankSampah bs = bankSampahRepository.getOne(idBankSampah);
-        yayasan.setIdBankSampah(bs);
         return yayasanRepository.save(yayasan);
     }
 
