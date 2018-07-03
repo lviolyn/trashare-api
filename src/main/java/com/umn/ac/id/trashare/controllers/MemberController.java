@@ -59,7 +59,7 @@ public class MemberController {
         return memberRepository.save(new Member(namaLengkap, email, noTelp, alamat, password, salt, poin, sessionToken, saldo, fotoProfil, fotoIdentitas, bs));
     }
 
-    @PutMapping("/member/id")
+    @PutMapping("/member/{id}")
     public Member updateMember(@PathVariable String id, @RequestBody Map<String, String> body){
         int idMember = Integer.parseInt(id);
         Member member = memberRepository.getOne(idMember);
@@ -79,7 +79,7 @@ public class MemberController {
         return memberRepository.save(member);
     }
 
-    @DeleteMapping
+    @DeleteMapping("/member/{id}")
     public boolean deleteMember(@PathVariable String id){
         int id_member = Integer.parseInt(id);
         Member member = memberRepository.getOne(id_member);

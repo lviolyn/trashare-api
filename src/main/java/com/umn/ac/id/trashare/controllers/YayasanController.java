@@ -35,7 +35,7 @@ public class YayasanController {
         String salt = body.get("salt");
         String sessionToken = body.get("sessionToken");
         String fotoProfil = body.get("fotoProfil");
-        return yayasanRepository.save(new Yayasan(namaYayasan, email, noTelp, password, salt, sessionToken, fotoProfil));
+        return yayasanRepository.save(new Yayasan(namaYayasan, email, noTelp, fotoProfil, password, salt, sessionToken));
     }
 
     @PutMapping("/yayasan/{id}")
