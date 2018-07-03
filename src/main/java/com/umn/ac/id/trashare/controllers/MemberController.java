@@ -6,7 +6,9 @@ import com.umn.ac.id.trashare.repositories.BankSampahRepository;
 import com.umn.ac.id.trashare.repositories.MemberRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import sun.misc.BASE64Decoder;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
@@ -52,8 +54,14 @@ public class MemberController {
         int poin = Integer.parseInt(body.get("poin"));
         String sessionToken = body.get("sessionToken");
         int saldo = Integer.parseInt(body.get("saldo"));
-        String fotoProfil = body.get("fotoProfil");
-        String fotoIdentitas = body.get("fotoIdentitas");
+        BASE64Decoder decoder = new BASE64Decoder();
+        byte[] fotoProfil = null, fotoIdentitas = null;
+        try {
+            fotoProfil = decoder.decodeBuffer(body.get("fotoProfil"));
+            fotoIdentitas = decoder.decodeBuffer(body.get("fotoIdentitas"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         int idBankSampah = Integer.parseInt(body.get("idBankSampah"));
         BankSampah bs = bankSampahRepository.getOne(idBankSampah);
         return memberRepository.save(new Member(namaLengkap, email, noTelp, alamat, password, salt, poin, sessionToken, saldo, fotoProfil, fotoIdentitas, bs));
@@ -71,8 +79,16 @@ public class MemberController {
         member.setSalt(body.get("salt"));
         member.setPoin(Integer.parseInt(body.get("poin")));
         member.setSaldo(Integer.parseInt(body.get("saldo")));
-        member.setFotoProfil(body.get("fotoProfil"));
-        member.setFotoIdentitas(body.get("fotoIdentitas"));
+        BASE64Decoder decoder = new BASE64Decoder();
+        byte[] fotoProfil = null, fotoIdentitas = null;
+        try {
+            fotoProfil = decoder.decodeBuffer(body.get("fotoProfil"));
+            fotoIdentitas = decoder.decodeBuffer(body.get("fotoIdentitas"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        member.setFotoProfil(fotoProfil);
+        member.setFotoIdentitas(fotoIdentitas);
         int idBankSampah = Integer.parseInt(body.get("idBankSampah"));
         BankSampah bs = bankSampahRepository.getOne(idBankSampah);
         member.setIdBankSampah(bs);

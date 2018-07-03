@@ -49,7 +49,7 @@ public class BankSampah {
     private String sessionToken;
 
     @Column(name = "foto_profil")
-    private String fotoProfil;
+    private byte[] fotoProfil;
 
     // Banyak (Yayasan) ke 1 BS --> Banyak BS dimiliki 1 Yayasan
     @ManyToOne(targetEntity = Yayasan.class)
@@ -66,7 +66,7 @@ public class BankSampah {
     public BankSampah() {
     }
 
-    public BankSampah(String namaBankSampah, String namaKetua, String alamat, String wilayah, String noTelp, String email, String deskripsiBankSampah, String password, String salt, String sessionToken, String fotoProfil, Yayasan idYayasan) {
+    public BankSampah(String namaBankSampah, String namaKetua, String alamat, String wilayah, String noTelp, String email, String deskripsiBankSampah, String password, String salt, String sessionToken, byte[] fotoProfil, Yayasan idYayasan) {
         this.namaBankSampah = namaBankSampah;
         this.namaKetua = namaKetua;
         this.alamat = alamat;
@@ -126,7 +126,7 @@ public class BankSampah {
         this.sessionToken = sessionToken;
     }
 
-    public void setFotoProfil(String fotoProfil) {
+    public void setFotoProfil(byte[] fotoProfil) {
         this.fotoProfil = fotoProfil;
     }
 
@@ -187,7 +187,7 @@ public class BankSampah {
         return sessionToken;
     }
 
-    public String getFotoProfil() {
+    public byte[] getFotoProfil() {
         return fotoProfil;
     }
 

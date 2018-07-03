@@ -35,7 +35,7 @@ public class Yayasan {
     private String sessionToken;
 
     @Column(name = "foto_profil")
-    private String fotoProfil;
+    private byte[] fotoProfil;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idYayasan")
     private Set<BankSampah> bankSampahs = new HashSet<BankSampah>(0);
@@ -44,11 +44,11 @@ public class Yayasan {
     public Yayasan() {
     }
 
-    public Yayasan(String namaYayasan, String email, String noTelp, String urlFotoProfil, String password, String salt, String sessionToken) {
+    public Yayasan(String namaYayasan, String email, String noTelp, byte[] fotoProfil, String password, String salt, String sessionToken) {
         this.namaYayasan = namaYayasan;
         this.email = email;
         this.noTelp = noTelp;
-        this.fotoProfil = urlFotoProfil;
+        this.fotoProfil = fotoProfil;
         this.password = password;
         this.salt = salt;
         this.sessionToken = sessionToken;
@@ -84,7 +84,7 @@ public class Yayasan {
         this.sessionToken = sessionToken;
     }
 
-    public void setFotoProfil(String fotoProfil) {
+    public void setFotoProfil(byte[] fotoProfil) {
         this.fotoProfil = fotoProfil;
     }
 
@@ -122,7 +122,7 @@ public class Yayasan {
         return sessionToken;
     }
 
-    public String getFotoProfil() {
+    public byte[] getFotoProfil() {
         return fotoProfil;
     }
 

@@ -42,10 +42,10 @@ public class Member {
     private int saldo;
 
     @Column(name = "foto_profil")
-    private String fotoProfil;
+    private byte[] fotoProfil;
 
     @Column(name = "foto_identitas")
-    private String fotoIdentitas;
+    private byte[] fotoIdentitas;
 
     // Banyak (BS) ke satu (Member) --> 1 BS bisa terdaftar di banyak member
     @ManyToOne(targetEntity = BankSampah.class, cascade = CascadeType.ALL)
@@ -56,7 +56,7 @@ public class Member {
     public Member() {
     }
 
-    public Member(String namaLengkap, String email, String noTelp, String alamat, String password, String salt, int poin, String sessionToken, int saldo, String fotoProfil, String fotoIdentitas, BankSampah idBankSampah) {
+    public Member(String namaLengkap, String email, String noTelp, String alamat, String password, String salt, int poin, String sessionToken, int saldo, byte[] fotoProfil, byte[] fotoIdentitas, BankSampah idBankSampah) {
         this.namaLengkap = namaLengkap;
         this.email = email;
         this.noTelp = noTelp;
@@ -112,11 +112,11 @@ public class Member {
         this.saldo = saldo;
     }
 
-    public void setFotoProfil(String fotoProfil) {
+    public void setFotoProfil(byte[] fotoProfil) {
         this.fotoProfil = fotoProfil;
     }
 
-    public void setFotoIdentitas(String fotoIdentitas) {
+    public void setFotoIdentitas(byte[] fotoIdentitas) {
         this.fotoIdentitas = fotoIdentitas;
     }
 
@@ -165,11 +165,11 @@ public class Member {
         return saldo;
     }
 
-    public String getFotoProfil() {
+    public byte[] getFotoProfil() {
         return fotoProfil;
     }
 
-    public String getFotoIdentitas() {
+    public byte[] getFotoIdentitas() {
         return fotoIdentitas;
     }
 

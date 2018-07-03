@@ -6,9 +6,11 @@ import com.umn.ac.id.trashare.repositories.BankSampahRepository;
 import com.umn.ac.id.trashare.repositories.YayasanRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import sun.misc.BASE64Decoder;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.swing.*;
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
@@ -47,7 +49,13 @@ public class BankSampahController {
         String password = body.get("password");
         String salt = body.get("salt");
         String sessionToken = body.get("sessionToken");
-        String fotoProfil = body.get("fotoProfil");
+        BASE64Decoder decoder = new BASE64Decoder();
+        byte[] fotoProfil = null;
+        try {
+            fotoProfil = decoder.decodeBuffer(body.get("fotoProfil"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         int idYayasan = Integer.parseInt(body.get("idYayasan"));
         Yayasan ys = yayasanRepository.getOne(idYayasan);
         return bankSampahRepository.save(new BankSampah(namaBankSampah, namaKetua, alamat, wilayah, noTelp, email, deskripsiBankSampah, password, salt, sessionToken, fotoProfil, ys));
@@ -66,7 +74,14 @@ public class BankSampahController {
         bankSampah.setDeskripsiBankSampah(body.get("deskripsiBankSampah"));
         bankSampah.setPassword(body.get("password"));
         bankSampah.setSalt(body.get("salt"));
-        bankSampah.setFotoProfil(body.get("fotoProfil"));
+        BASE64Decoder decoder = new BASE64Decoder();
+        byte[] fotoProfil = null;
+        try {
+            fotoProfil = decoder.decodeBuffer(body.get("fotoProfil"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        bankSampah.setFotoProfil(fotoProfil);
         int idYayasan = Integer.parseInt(body.get("idYayasan"));
         Yayasan ys = yayasanRepository.getOne(idYayasan);
         bankSampah.setIdYayasan(ys);

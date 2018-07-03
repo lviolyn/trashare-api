@@ -6,7 +6,9 @@ import com.umn.ac.id.trashare.repositories.BankSampahRepository;
 import com.umn.ac.id.trashare.repositories.YayasanRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import sun.misc.BASE64Decoder;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
@@ -34,7 +36,13 @@ public class YayasanController {
         String password = body.get("password");
         String salt = body.get("salt");
         String sessionToken = body.get("sessionToken");
-        String fotoProfil = body.get("fotoProfil");
+        BASE64Decoder decoder = new BASE64Decoder();
+        byte[] fotoProfil = null;
+        try {
+            fotoProfil = decoder.decodeBuffer(body.get("fotoProfil"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         return yayasanRepository.save(new Yayasan(namaYayasan, email, noTelp, fotoProfil, password, salt, sessionToken));
     }
 
@@ -47,7 +55,14 @@ public class YayasanController {
         yayasan.setNoTelp(body.get("noTelp"));
         yayasan.setPassword(body.get("password"));
         yayasan.setSalt(body.get("salt"));
-        yayasan.setFotoProfil(body.get("fotoProfil"));
+        BASE64Decoder decoder = new BASE64Decoder();
+        byte[] fotoProfil = null;
+        try {
+            fotoProfil = decoder.decodeBuffer(body.get("fotoProfil"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        yayasan.setFotoProfil(fotoProfil);
         return yayasanRepository.save(yayasan);
     }
 
