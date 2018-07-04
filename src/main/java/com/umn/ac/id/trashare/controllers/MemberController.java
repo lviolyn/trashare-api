@@ -72,8 +72,9 @@ public class MemberController {
         if(idBankSampah != 0){
             bs = bankSampahRepository.getOne(idBankSampah);
         }
+        String pushToken = body.get("pushToken");
         //BankSampah bs = bankSampahRepository.getOne(idBankSampah);
-        return memberRepository.save(new Member(namaLengkap, email, noTelp, alamat, newPassword, salt, poin, sessionToken, saldo, fotoProfil, fotoIdentitas, bs));
+        return memberRepository.save(new Member(namaLengkap, email, noTelp, alamat, newPassword, salt, poin, sessionToken, saldo, fotoProfil, fotoIdentitas, bs, pushToken));
     }
 
     @PutMapping("/member/{id}")
@@ -128,6 +129,9 @@ public class MemberController {
             int idBankSampah = Integer.parseInt(body.get("idBankSampah"));
             BankSampah bs = bankSampahRepository.getOne(idBankSampah);
             member.setIdBankSampah(bs);
+        }
+        if(body.get("pushToken") != null && !body.get("pushToken").equals("")) {
+            member.setPushToken(body.get("pushToken"));
         }
         return memberRepository.save(member);
     }

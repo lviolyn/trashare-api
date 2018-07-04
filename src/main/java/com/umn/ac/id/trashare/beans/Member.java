@@ -52,11 +52,14 @@ public class Member {
     @JoinColumn(name = "id_bank_sampah", nullable = true, referencedColumnName = "id_bank_sampah")
     private BankSampah idBankSampah;
 
+    @Column(name = "push_token")
+    private String pushToken;
+
     // Constructor
     public Member() {
     }
 
-    public Member(String namaLengkap, String email, String noTelp, String alamat, String password, String salt, int poin, String sessionToken, int saldo, byte[] fotoProfil, byte[] fotoIdentitas, BankSampah idBankSampah) {
+    public Member(String namaLengkap, String email, String noTelp, String alamat, String password, String salt, int poin, String sessionToken, int saldo, byte[] fotoProfil, byte[] fotoIdentitas, BankSampah idBankSampah, String pushToken) {
         this.namaLengkap = namaLengkap;
         this.email = email;
         this.noTelp = noTelp;
@@ -69,6 +72,7 @@ public class Member {
         this.fotoProfil = fotoProfil;
         this.fotoIdentitas = fotoIdentitas;
         this.idBankSampah = idBankSampah;
+        this.pushToken = pushToken;
     }
 
     // Setter
@@ -124,6 +128,10 @@ public class Member {
         this.idBankSampah = idBankSampah;
     }
 
+    public String getPushToken() {
+        return pushToken;
+    }
+
     // Getter
     public int getIdMember() {
         return idMember;
@@ -177,5 +185,9 @@ public class Member {
     @JsonIgnore
     public BankSampah getIdBankSampah() {
         return idBankSampah;
+    }
+
+    public void setPushToken(String pushToken) {
+        this.pushToken = pushToken;
     }
 }

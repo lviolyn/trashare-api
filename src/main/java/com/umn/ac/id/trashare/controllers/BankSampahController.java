@@ -67,7 +67,8 @@ public class BankSampahController {
         Yayasan ys = yayasanRepository.getOne(idYayasan);
         double latitude = Double.parseDouble(body.get("latitude"));
         double longitude = Double.parseDouble(body.get("longitude"));
-        return bankSampahRepository.save(new BankSampah(namaBankSampah, namaKetua, alamat, wilayah, noTelp, email, deskripsiBankSampah, newPassword, salt, sessionToken, fotoProfil, ys, latitude, longitude));
+        String pushToken = body.get("pushToken");
+        return bankSampahRepository.save(new BankSampah(namaBankSampah, namaKetua, alamat, wilayah, noTelp, email, deskripsiBankSampah, newPassword, salt, sessionToken, fotoProfil, ys, latitude, longitude, pushToken));
     }
 
     @PutMapping("/bank-sampah/{id}")
@@ -121,6 +122,9 @@ public class BankSampahController {
         }
         if(body.get("longitude") != null && !body.get("longitude").equals("")) {
             bankSampah.setLatitude(Double.parseDouble(body.get("longitude")));
+        }
+        if(body.get("pushToken") != null && !body.get("pushToken").equals("")) {
+            bankSampah.setPushToken(body.get("pushToken"));
         }
         return bankSampahRepository.save(bankSampah);
     }

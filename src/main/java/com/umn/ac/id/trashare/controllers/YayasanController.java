@@ -56,7 +56,8 @@ public class YayasanController {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return yayasanRepository.save(new Yayasan(namaYayasan, email, noTelp, fotoProfil, newPassword, salt, sessionToken));
+        String pushToken = body.get("pushToken");
+        return yayasanRepository.save(new Yayasan(namaYayasan, email, noTelp, fotoProfil, newPassword, salt, sessionToken, pushToken));
     }
 
     @PutMapping("/yayasan/{id}")
@@ -87,6 +88,9 @@ public class YayasanController {
                 e.printStackTrace();
             }
             yayasan.setFotoProfil(fotoProfil);
+        }
+        if(body.get("pushToken") != null && !body.get("pushToken").equals("")) {
+            yayasan.setSessionToken(body.get("pushToken"));
         }
         return yayasanRepository.save(yayasan);
     }

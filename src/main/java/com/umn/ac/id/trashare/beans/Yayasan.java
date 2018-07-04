@@ -40,11 +40,14 @@ public class Yayasan {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idYayasan")
     private Set<BankSampah> bankSampahs = new HashSet<BankSampah>(0);
 
+    @Column(name = "push_token")
+    private String pushToken;
+
     // Constructor
     public Yayasan() {
     }
 
-    public Yayasan(String namaYayasan, String email, String noTelp, byte[] fotoProfil, String password, String salt, String sessionToken) {
+    public Yayasan(String namaYayasan, String email, String noTelp, byte[] fotoProfil, String password, String salt, String sessionToken, String pushToken) {
         this.namaYayasan = namaYayasan;
         this.email = email;
         this.noTelp = noTelp;
@@ -52,6 +55,7 @@ public class Yayasan {
         this.password = password;
         this.salt = salt;
         this.sessionToken = sessionToken;
+        this.pushToken = pushToken;
     }
 
    // Setter
@@ -92,6 +96,10 @@ public class Yayasan {
         this.bankSampahs = bankSampahs;
     }
 
+    public void setPushToken(String pushToken) {
+        this.pushToken = pushToken;
+    }
+
     // Getter
 
     public int getIdYayasan() {
@@ -128,6 +136,10 @@ public class Yayasan {
 
     public Set<BankSampah> getBankSampahs() {
         return bankSampahs;
+    }
+
+    public String getPushToken() {
+        return pushToken;
     }
 }
 

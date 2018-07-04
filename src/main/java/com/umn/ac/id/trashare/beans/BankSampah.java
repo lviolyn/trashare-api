@@ -57,6 +57,9 @@ public class BankSampah {
     @Column(name = "longitude")
     private double longitude;
 
+    @Column(name = "push_token")
+    private String pushToken;
+
     // Banyak (Yayasan) ke 1 BS --> Banyak BS dimiliki 1 Yayasan
     @ManyToOne(targetEntity = Yayasan.class)
     @JoinColumn(name = "id_yayasan", nullable = false, referencedColumnName = "id_yayasan")
@@ -72,7 +75,7 @@ public class BankSampah {
     public BankSampah() {
     }
 
-    public BankSampah(String namaBankSampah, String namaKetua, String alamat, String wilayah, String noTelp, String email, String deskripsiBankSampah, String password, String salt, String sessionToken, byte[] fotoProfil, Yayasan idYayasan, double latitude, double longitude) {
+    public BankSampah(String namaBankSampah, String namaKetua, String alamat, String wilayah, String noTelp, String email, String deskripsiBankSampah, String password, String salt, String sessionToken, byte[] fotoProfil, Yayasan idYayasan, double latitude, double longitude, String pushToken) {
         this.namaBankSampah = namaBankSampah;
         this.namaKetua = namaKetua;
         this.alamat = alamat;
@@ -87,6 +90,7 @@ public class BankSampah {
         this.idYayasan = idYayasan;
         this.latitude = latitude;
         this.longitude = longitude;
+        this.pushToken = pushToken;
     }
 
     // Setter
@@ -156,6 +160,10 @@ public class BankSampah {
 
     public void setLongitude(double longitude) {
         this.longitude = longitude;
+    }
+
+    public void setPushToken(String pushToken) {
+        this.pushToken = pushToken;
     }
 
     // Getter
@@ -229,5 +237,9 @@ public class BankSampah {
 
     public double getLongitude() {
         return longitude;
+    }
+
+    public String getPushToken() {
+        return pushToken;
     }
 }
