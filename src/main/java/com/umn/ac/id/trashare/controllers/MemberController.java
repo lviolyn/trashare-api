@@ -74,29 +74,55 @@ public class MemberController {
     public Member updateMember(@PathVariable String id, @RequestBody Map<String, String> body){
         int idMember = Integer.parseInt(id);
         Member member = memberRepository.getOne(idMember);
-        member.setNamaLengkap(body.get("namaLengkap"));
-        member.setEmail(body.get("email"));
-        member.setNoTelp(body.get("noTelp"));
-        member.setAlamat(body.get("alamat"));
-        String newPassword = body.get("password");
-        String newSalt = BCrypt.gensalt();
-        member.setSalt(newSalt);
-        member.setPassword(BCrypt.hashpw(newPassword, newSalt));
-        member.setPoin(Integer.parseInt(body.get("poin")));
-        member.setSaldo(Integer.parseInt(body.get("saldo")));
-        BASE64Decoder decoder = new BASE64Decoder();
-        byte[] fotoProfil = null, fotoIdentitas = null;
-        try {
-            fotoProfil = decoder.decodeBuffer(body.get("fotoProfil"));
-            fotoIdentitas = decoder.decodeBuffer(body.get("fotoIdentitas"));
-        } catch (IOException e) {
-            e.printStackTrace();
+        if(body.get("namaLengkap") != null && !body.get("namaLengkap").equals("")) {
+            member.setNamaLengkap(body.get("namaLengkap"));
         }
-        member.setFotoProfil(fotoProfil);
-        member.setFotoIdentitas(fotoIdentitas);
-        int idBankSampah = Integer.parseInt(body.get("idBankSampah"));
-        BankSampah bs = bankSampahRepository.getOne(idBankSampah);
-        member.setIdBankSampah(bs);
+        if(body.get("email") != null && !body.get("email").equals("")) {
+            member.setEmail(body.get("email"));
+        }
+        if(body.get("noTelp") != null && !body.get("noTelp").equals("")) {
+            member.setNoTelp(body.get("noTelp"));
+        }
+        if(body.get("alamat") != null && !body.get("alamat").equals("")) {
+            member.setAlamat(body.get("alamat"));
+        }
+        if(body.get("password") != null && !body.get("password").equals("")) {
+            String newPassword = body.get("password");
+            String newSalt = BCrypt.gensalt();
+            member.setSalt(newSalt);
+            member.setPassword(BCrypt.hashpw(newPassword, newSalt));
+        }
+        if(body.get("poin") != null && !body.get("poin").equals("")) {
+            member.setPoin(Integer.parseInt(body.get("poin")));
+        }
+        if(body.get("saldo") != null && !body.get("saldo").equals("")) {
+            member.setSaldo(Integer.parseInt(body.get("saldo")));
+        }
+        if(body.get("fotoProfil") != null && !body.get("fotoProfil").equals("")) {
+            BASE64Decoder decoder = new BASE64Decoder();
+            byte[] fotoProfil = null;
+            try {
+                fotoProfil = decoder.decodeBuffer(body.get("fotoProfil"));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            member.setFotoProfil(fotoProfil);
+        }
+        if(body.get("fotoIdentitas") != null && !body.get("fotoIdentitas").equals("")){
+            BASE64Decoder decoder2 = new BASE64Decoder();
+            byte[] fotoIdentitas = null;
+            try{
+                fotoIdentitas = decoder2.decodeBuffer(body.get("fotoIdentitas"));
+            } catch (IOException e){
+                e.printStackTrace();
+            }
+            member.setFotoIdentitas(fotoIdentitas);
+        }
+        if(body.get("idBankSampah") != null && !body.get("idBankSampah").equals("")) {
+            int idBankSampah = Integer.parseInt(body.get("idBankSampah"));
+            BankSampah bs = bankSampahRepository.getOne(idBankSampah);
+            member.setIdBankSampah(bs);
+        }
         return memberRepository.save(member);
     }
 

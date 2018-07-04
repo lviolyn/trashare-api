@@ -37,10 +37,18 @@ public class SampahController {
     public Sampah updateSampah(@PathVariable String id, @RequestBody Map<String, String> body){
         int idSampah = Integer.parseInt(id);
         Sampah sampah = sampahRepository.getOne(idSampah);
-        sampah.setHargaBeliLapak(Integer.parseInt(body.get("hargaBeliLapak")));
-        sampah.setHargaBeliNasabah(Integer.parseInt(body.get("hargaBeliNasabah")));
-        sampah.setNamaSampah(body.get("namaSampah"));
-        sampah.setTipeSampah(body.get("tipeSampah"));
+        if(body.get("hargaBeliLapak") != null && !body.get("hargaBeliLapak").equals("")){
+            sampah.setHargaBeliLapak(Integer.parseInt(body.get("hargaBeliLapak")));
+        }
+        if(body.get("hargaBeliNasabah") != null && !body.get("hargaBeliNasabah").equals("")){
+            sampah.setHargaBeliNasabah(Integer.parseInt(body.get("hargaBeliNasabah")));
+        }
+        if(body.get("namaSampah") != null && !body.get("namaSampah").equals("")){
+            sampah.setNamaSampah(body.get("namaSampah"));
+        }
+        if(body.get("tipeSampah") != null && !body.get("tipeSampah").equals("")) {
+            sampah.setTipeSampah(body.get("tipeSampah"));
+        }
         return sampahRepository.save(sampah);
     }
 

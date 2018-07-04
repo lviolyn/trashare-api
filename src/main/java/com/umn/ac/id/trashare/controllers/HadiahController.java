@@ -60,28 +60,40 @@ public class HadiahController {
     public Hadiah updateHadiah(@PathVariable String id, @RequestBody Map<String, String> body){
         int idHadiah = Integer.parseInt(id);
         Hadiah hadiah = hadiahRepository.getOne(idHadiah);
-        hadiah.setNamaHadiah(body.get("namaHadiah"));
-        hadiah.setPoin(Integer.parseInt(body.get("poin")));
-        hadiah.setDeskripsiHadiah(body.get("deskripsiHadiah"));
-        hadiah.setSponsor(body.get("sponsor"));
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy");
-        simpleDateFormat.setTimeZone(TimeZone.getTimeZone("UTC+7:00"));
-        DateFormat dateFormat = simpleDateFormat;
-        Date periodeTukar = new Date();
-        try {
-            periodeTukar = dateFormat.parse(body.get("periodeTukar"));
-        } catch (ParseException e) {
-            e.printStackTrace();
+        if(body.get("namaHadiah") != null && !body.get("namaHadiah").equals("")) {
+            hadiah.setNamaHadiah(body.get("namaHadiah"));
         }
-        hadiah.setPeriodeTukar(periodeTukar);
-        BASE64Decoder decoder = new BASE64Decoder();
-        byte[] fotoHadiah = null;
-        try {
-            fotoHadiah = decoder.decodeBuffer(body.get("fotoHadiah"));
-        } catch (IOException e) {
-            e.printStackTrace();
+        if(body.get("poin") != null && !body.get("poin").equals("")) {
+            hadiah.setPoin(Integer.parseInt(body.get("poin")));
         }
-        hadiah.setFotoHadiah(fotoHadiah);
+        if(body.get("deskripsiHadiah") != null && !body.get("deskripsiHadiah").equals("")) {
+            hadiah.setDeskripsiHadiah(body.get("deskripsiHadiah"));
+        }
+        if(body.get("sponsor") != null && !body.get("sponsor").equals("")) {
+            hadiah.setSponsor(body.get("sponsor"));
+        }
+        if(body.get("periodeTukar") != null && !body.get("periodeTukar").equals("")) {
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy");
+            simpleDateFormat.setTimeZone(TimeZone.getTimeZone("UTC+7:00"));
+            DateFormat dateFormat = simpleDateFormat;
+            Date periodeTukar = new Date();
+            try {
+                periodeTukar = dateFormat.parse(body.get("periodeTukar"));
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            hadiah.setPeriodeTukar(periodeTukar);
+        }
+        if(body.get("fotoHadiah") != null && !body.get("fotoHadiah").equals("")) {
+            BASE64Decoder decoder = new BASE64Decoder();
+            byte[] fotoHadiah = null;
+            try {
+                fotoHadiah = decoder.decodeBuffer(body.get("fotoHadiah"));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            hadiah.setFotoHadiah(fotoHadiah);
+        }
         return hadiahRepository.save(hadiah);
     }
 

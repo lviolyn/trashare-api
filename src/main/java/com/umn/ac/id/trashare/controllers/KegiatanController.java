@@ -68,29 +68,39 @@ public class KegiatanController {
     public Kegiatan updateKegiatan(@PathVariable String id, @RequestBody Map<String, String> body){
         int idKegiatan = Integer.parseInt(id);
         Kegiatan kegiatan = kegiatanRepository.getOne(idKegiatan);
-        kegiatan.setNamaKegiatan(body.get("namaKegiatan"));
-        kegiatan.setDeskripsiKegiatan(body.get("deskripsiKegiatan"));
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy");
-        simpleDateFormat.setTimeZone(TimeZone.getTimeZone("UTC+7:00"));
-        DateFormat dateFormat = simpleDateFormat;
-        Date tanggalKegiatan = new Date();
-        try {
-            tanggalKegiatan = dateFormat.parse(body.get("tanggalKegiatan"));
-        } catch (ParseException e) {
-            e.printStackTrace();
+        if(body.get("namaKegiatan") != null && !body.get("namaKegiatan").equals("")) {
+            kegiatan.setNamaKegiatan(body.get("namaKegiatan"));
         }
-        kegiatan.setTanggalKegiatan(tanggalKegiatan);
-        int idBankSampah = Integer.parseInt(body.get("idBankSampah"));
-        BankSampah bs = bankSampahRepository.getOne(idBankSampah);
-        kegiatan.setIdBankSampah(bs);
-        BASE64Decoder decoder = new BASE64Decoder();
-        byte[] fotoKegiatan = null;
-        try {
-            fotoKegiatan = decoder.decodeBuffer(body.get("fotoKegiatan"));
-        } catch (IOException e) {
-            e.printStackTrace();
+        if(body.get("deskripsiKegiatan") != null && !body.get("deskripsiKegiatan").equals("")) {
+            kegiatan.setDeskripsiKegiatan(body.get("deskripsiKegiatan"));
         }
-        kegiatan.setFotoKegiatan(fotoKegiatan);
+        if(body.get("tanggalKegiatan") != null && !body.get("tanggalKegiatan").equals("")) {
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy");
+            simpleDateFormat.setTimeZone(TimeZone.getTimeZone("UTC+7:00"));
+            DateFormat dateFormat = simpleDateFormat;
+            Date tanggalKegiatan = new Date();
+            try {
+                tanggalKegiatan = dateFormat.parse(body.get("tanggalKegiatan"));
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            kegiatan.setTanggalKegiatan(tanggalKegiatan);
+        }
+        if(body.get("idBankSampah") != null && !body.get("idBankSampah").equals("")) {
+            int idBankSampah = Integer.parseInt(body.get("idBankSampah"));
+            BankSampah bs = bankSampahRepository.getOne(idBankSampah);
+            kegiatan.setIdBankSampah(bs);
+        }
+        if(body.get("fotoKegiatan") != null && !body.get("fotoKegiatan").equals("")) {
+            BASE64Decoder decoder = new BASE64Decoder();
+            byte[] fotoKegiatan = null;
+            try {
+                fotoKegiatan = decoder.decodeBuffer(body.get("fotoKegiatan"));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            kegiatan.setFotoKegiatan(fotoKegiatan);
+        }
         return kegiatanRepository.save(kegiatan);
     }
 

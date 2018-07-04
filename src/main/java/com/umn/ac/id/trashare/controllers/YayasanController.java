@@ -5,6 +5,9 @@ import com.umn.ac.id.trashare.beans.BankSampah;
 import com.umn.ac.id.trashare.beans.Yayasan;
 import com.umn.ac.id.trashare.repositories.BankSampahRepository;
 import com.umn.ac.id.trashare.repositories.YayasanRepository;
+import io.swagger.annotations.ApiParam;
+import io.swagger.annotations.Example;
+import io.swagger.annotations.ExampleProperty;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.web.bind.annotation.*;
@@ -16,8 +19,15 @@ import java.util.Map;
 
 @RestController
 public class YayasanController {
-    @Autowired
+
     YayasanRepository yayasanRepository;
+    BankSampahRepository bankSampahRepository;
+
+    @Autowired
+    public YayasanController(YayasanRepository yayasanRepository, BankSampahRepository bankSampahRepository) {
+        this.yayasanRepository = yayasanRepository;
+        this.bankSampahRepository = bankSampahRepository;
+    }
 
     @GetMapping("/yayasan")
     public List<Yayasan> getAllYayasan(){
@@ -31,7 +41,7 @@ public class YayasanController {
     }
 
     @PostMapping("/yayasan")
-    public Yayasan createYayasan(@RequestBody Map<String, String> body){
+    public Yayasan createYayasan(@ApiParam("description") @RequestBody Map<String, String> body){
         String namaYayasan = body.get("namaYayasan");
         String email = body.get("email");
         String noTelp = body.get("noTelp");
@@ -53,21 +63,31 @@ public class YayasanController {
     public Yayasan updateYayasan(@PathVariable String id, @RequestBody Map<String, String> body){
         int idYayasan = Integer.parseInt(id);
         Yayasan yayasan = yayasanRepository.getOne(idYayasan);
-        yayasan.setNamaYayasan(body.get("namaYayasan"));
-        yayasan.setEmail(body.get("email"));
-        yayasan.setNoTelp(body.get("noTelp"));
-        String newSalt = BCrypt.gensalt();
-        yayasan.setSalt(newSalt);
-        String newPassword = body.get("password");
-        yayasan.setPassword(BCrypt.hashpw(newPassword, newSalt));
-        BASE64Decoder decoder = new BASE64Decoder();
-        byte[] fotoProfil = null;
-        try {
-            fotoProfil = decoder.decodeBuffer(body.get("fotoProfil"));
-        } catch (IOException e) {
-            e.printStackTrace();
+        if(body.get("namaYayasan") != null && !body.get("namaYayasan").equals("")) {
+            yayasan.setNamaYayasan(body.get("namaYayasan"));
         }
-        yayasan.setFotoProfil(fotoProfil);
+        if(body.get("email") != null && !body.get("email").equals("")) {
+            yayasan.setEmail(body.get("email"));
+        }
+        if(body.get("noTelp") != null && !body.get("noTelp").equals("")) {
+            yayasan.setNoTelp(body.get("noTelp"));
+        }
+        if(body.get("password") != null && !body.get("password").equals("")) {
+            String newSalt = BCrypt.gensalt();
+            yayasan.setSalt(newSalt);
+            String newPassword = body.get("password");
+            yayasan.setPassword(BCrypt.hashpw(newPassword, newSalt));
+        }
+        if(body.get("fotoProfil") != null && !body.get("fotoProfil").equals("")) {
+            BASE64Decoder decoder = new BASE64Decoder();
+            byte[] fotoProfil = null;
+            try {
+                fotoProfil = decoder.decodeBuffer(body.get("fotoProfil"));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            yayasan.setFotoProfil(fotoProfil);
+        }
         return yayasanRepository.save(yayasan);
     }
 
@@ -92,5 +112,12 @@ public class YayasanController {
             }
         }
         return null;
+    }
+
+    @GetMapping("/yayasan/{id}/bank-sampah")
+    public Yayasan getYayasanByBankSampah(@PathVariable String id) {
+        int bankSampahId = Integer.parseInt(id);
+        BankSampah bankSampah = bankSampahRepository.getOne(bankSampahId);
+        return yayasanRepository.findOneByBankSampahs(bankSampah);
     }
 }
