@@ -4,7 +4,9 @@ import com.umn.ac.id.trashare.beans.Hadiah;
 import com.umn.ac.id.trashare.repositories.HadiahRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import sun.misc.BASE64Decoder;
 
+import java.io.IOException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -44,7 +46,14 @@ public class HadiahController {
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        return hadiahRepository.save(new Hadiah(namaHadiah, poin, deskripsiHadiah, sponsor, periodeTukar));
+        BASE64Decoder decoder = new BASE64Decoder();
+        byte[] fotoHadiah = null;
+        try {
+            fotoHadiah = decoder.decodeBuffer(body.get("fotoHadiah"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return hadiahRepository.save(new Hadiah(namaHadiah, poin, deskripsiHadiah, sponsor, periodeTukar, fotoHadiah));
     }
 
     @PutMapping("/hadiah/{id}")
@@ -64,6 +73,14 @@ public class HadiahController {
         } catch (ParseException e) {
             e.printStackTrace();
         }
+        BASE64Decoder decoder = new BASE64Decoder();
+        byte[] fotoHadiah = null;
+        try {
+            fotoHadiah = decoder.decodeBuffer(body.get("fotoHadiah"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        hadiah.setFotoHadiah(fotoHadiah);
         hadiah.setPeriodeTukar(periodeTukar);
         return hadiahRepository.save(hadiah);
     }

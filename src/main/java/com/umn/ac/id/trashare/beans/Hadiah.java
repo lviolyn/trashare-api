@@ -33,15 +33,19 @@ public class Hadiah {
     @Column(name = "periode_tukar")
     private Date periodeTukar;
 
+    @Column(name = "foto_hadiah")
+    private byte[] fotoHadiah;
+
     public Hadiah() {
     }
 
-    public Hadiah(String namaHadiah, int poin, String deskripsiHadiah, String sponsor, Date periodeTukar) {
+    public Hadiah(String namaHadiah, int poin, String deskripsiHadiah, String sponsor, Date periodeTukar, byte[] fotoHadiah) {
         this.namaHadiah = namaHadiah;
         this.poin = poin;
         this.deskripsiHadiah = deskripsiHadiah;
         this.sponsor = sponsor;
         this.periodeTukar = periodeTukar;
+        this.fotoHadiah = fotoHadiah;
     }
 
     public int getIdHadiah() {
@@ -90,5 +94,13 @@ public class Hadiah {
 
     public void setPeriodeTukar(Date periodeTukar) {
         this.periodeTukar = periodeTukar;
+    }
+
+    public byte[] getFotoHadiah() {
+        return fotoHadiah;
+    }
+
+    public void setFotoHadiah(byte[] fotoHadiah) {
+        this.fotoHadiah = fotoHadiah;
     }
 }
