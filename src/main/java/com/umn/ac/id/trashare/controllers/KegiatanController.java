@@ -61,7 +61,8 @@ public class KegiatanController {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return kegiatanRepository.save(new Kegiatan(namaKegiatan, deskripsiKegiatan, tanggalKegiatan, bs, fotoKegiatan));
+        String tempatKegiatan = body.get("tempatKegiatan");
+        return kegiatanRepository.save(new Kegiatan(namaKegiatan, deskripsiKegiatan, tanggalKegiatan, fotoKegiatan, tempatKegiatan, bs));
     }
 
     @PutMapping("/kegiatan/{id}")
@@ -100,6 +101,9 @@ public class KegiatanController {
                 e.printStackTrace();
             }
             kegiatan.setFotoKegiatan(fotoKegiatan);
+        }
+        if (body.get("tempatKegiatan") != null && !body.get("tempatKegiatan").equals("")) {
+            kegiatan.setTempatKegiatan(body.get("tempatKegiatan"));
         }
         return kegiatanRepository.save(kegiatan);
     }
