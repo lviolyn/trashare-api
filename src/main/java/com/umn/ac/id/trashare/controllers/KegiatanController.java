@@ -6,7 +6,9 @@ import com.umn.ac.id.trashare.repositories.BankSampahRepository;
 import com.umn.ac.id.trashare.repositories.KegiatanRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import sun.misc.BASE64Decoder;
 
+import java.io.IOException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -25,7 +27,6 @@ public class KegiatanController {
         this.kegiatanRepository = kegiatanRepository;
         this.bankSampahRepository = bankSampahRepository;
     }
-
 
     @GetMapping("/kegiatan")
     public List<Kegiatan> getAllKegiatan(){
@@ -53,7 +54,14 @@ public class KegiatanController {
         }
         int idBankSampah = Integer.parseInt(body.get("idBankSampah"));
         BankSampah bs = bankSampahRepository.getOne(idBankSampah);
-        return kegiatanRepository.save(new Kegiatan(namaKegiatan, deskripsiKegiatan, tanggalKegiatan, bs));
+        BASE64Decoder decoder = new BASE64Decoder();
+        byte[] fotoKegiatan = null;
+        try {
+            fotoKegiatan = decoder.decodeBuffer(body.get("fotoKegiatan"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return kegiatanRepository.save(new Kegiatan(namaKegiatan, deskripsiKegiatan, tanggalKegiatan, bs, fotoKegiatan));
     }
 
     @PutMapping("/kegiatan/{id}")
@@ -75,6 +83,14 @@ public class KegiatanController {
         int idBankSampah = Integer.parseInt(body.get("idBankSampah"));
         BankSampah bs = bankSampahRepository.getOne(idBankSampah);
         kegiatan.setIdBankSampah(bs);
+        BASE64Decoder decoder = new BASE64Decoder();
+        byte[] fotoKegiatan = null;
+        try {
+            fotoKegiatan = decoder.decodeBuffer(body.get("fotoKegiatan"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        kegiatan.setFotoKegiatan(fotoKegiatan);
         return kegiatanRepository.save(kegiatan);
     }
 

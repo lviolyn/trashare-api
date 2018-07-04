@@ -73,6 +73,7 @@ public class HadiahController {
         } catch (ParseException e) {
             e.printStackTrace();
         }
+        hadiah.setPeriodeTukar(periodeTukar);
         BASE64Decoder decoder = new BASE64Decoder();
         byte[] fotoHadiah = null;
         try {
@@ -81,7 +82,6 @@ public class HadiahController {
             e.printStackTrace();
         }
         hadiah.setFotoHadiah(fotoHadiah);
-        hadiah.setPeriodeTukar(periodeTukar);
         return hadiahRepository.save(hadiah);
     }
 

@@ -26,6 +26,9 @@ public class Kegiatan {
     @Column(name = "tanggal_kegiatan")
     private Date tanggalKegiatan;
 
+    @Column(name = "foto_kegiatan")
+    private byte[] fotoKegiatan;
+
     // Banyak (Kegiatan) ke 1 BS --> 1 BS punya > 1 Kegiatan
     @ManyToOne(targetEntity = BankSampah.class)
     @JoinColumn(name = "id_bank_sampah", nullable = false, referencedColumnName = "id_bank_sampah")
@@ -35,11 +38,12 @@ public class Kegiatan {
     public Kegiatan() {
     }
 
-    public Kegiatan(String namaKegiatan, String deskripsiKegiatan, Date tanggalKegiatan, BankSampah idBankSampah) {
+    public Kegiatan(String namaKegiatan, String deskripsiKegiatan, Date tanggalKegiatan, BankSampah idBankSampah, byte[] fotoKegiatan) {
         this.namaKegiatan = namaKegiatan;
         this.deskripsiKegiatan = deskripsiKegiatan;
         this.tanggalKegiatan = tanggalKegiatan;
         this.idBankSampah = idBankSampah;
+        this.fotoKegiatan = fotoKegiatan;
     }
 
     // Setter
@@ -63,6 +67,10 @@ public class Kegiatan {
         this.idBankSampah = idBankSampah;
     }
 
+    public void setFotoKegiatan(byte[] fotoKegiatan) {
+        this.fotoKegiatan = fotoKegiatan;
+    }
+
     // Getter
     public int getIdKegiatan() {
         return idKegiatan;
@@ -84,4 +92,7 @@ public class Kegiatan {
     @JsonIgnore
     public BankSampah getIdBankSampah() { return idBankSampah; }
 
+    public byte[] getFotoKegiatan() {
+        return fotoKegiatan;
+    }
 }
