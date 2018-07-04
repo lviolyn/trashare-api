@@ -54,9 +54,9 @@ public class MemberController {
         String password = body.get("password");
         String salt = BCrypt.gensalt();
         String newPassword = BCrypt.hashpw(password, salt);
-        int poin = Integer.parseInt(body.get("poin"));
+        int poin = body.get("poin") != null ? Integer.parseInt(body.get("poin")) : 0;
         String sessionToken = "";
-        int saldo = Integer.parseInt(body.get("saldo"));
+        int saldo = body.get("saldo") != null ? Integer.parseInt(body.get("saldo")) : 0;
         BASE64Decoder decoder = new BASE64Decoder();
         byte[] fotoProfil = null, fotoIdentitas = null;
         try {
@@ -64,9 +64,15 @@ public class MemberController {
             fotoIdentitas = decoder.decodeBuffer(body.get("fotoIdentitas"));
         } catch (IOException e) {
             e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        int idBankSampah = Integer.parseInt(body.get("idBankSampah"));
-        BankSampah bs = bankSampahRepository.getOne(idBankSampah);
+        int idBankSampah = body.get("idBankSampah") != null ? Integer.parseInt(body.get("idBankSampah")) : 0;
+        BankSampah bs = null;
+        if(idBankSampah != 0){
+            bs = bankSampahRepository.getOne(idBankSampah);
+        }
+        //BankSampah bs = bankSampahRepository.getOne(idBankSampah);
         return memberRepository.save(new Member(namaLengkap, email, noTelp, alamat, newPassword, salt, poin, sessionToken, saldo, fotoProfil, fotoIdentitas, bs));
     }
 

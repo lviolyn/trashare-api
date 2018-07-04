@@ -9,9 +9,7 @@ import com.umn.ac.id.trashare.repositories.MemberRepository;
 import com.umn.ac.id.trashare.repositories.SampahRepository;
 import com.umn.ac.id.trashare.repositories.TransaksiRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.text.DateFormat;
 import java.text.ParseException;

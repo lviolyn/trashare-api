@@ -32,13 +32,13 @@ public class Member {
     @Column(name = "salt")
     private String salt;
 
-    @Column(name = "poin")
+    @Column(name = "poin", columnDefinition = "int default 0")
     private int poin;
 
     @Column(name = "session_token", unique = true)
     private String sessionToken;
 
-    @Column(name = "saldo")
+    @Column(name = "saldo", columnDefinition = "int default 0")
     private int saldo;
 
     @Column(name = "foto_profil")
@@ -49,7 +49,7 @@ public class Member {
 
     // Banyak (BS) ke satu (Member) --> 1 BS bisa terdaftar di banyak member
     @ManyToOne(targetEntity = BankSampah.class, cascade = CascadeType.ALL)
-    @JoinColumn(name = "id_bank_sampah", nullable = false, referencedColumnName = "id_bank_sampah")
+    @JoinColumn(name = "id_bank_sampah", nullable = true, referencedColumnName = "id_bank_sampah")
     private BankSampah idBankSampah;
 
     // Constructor
