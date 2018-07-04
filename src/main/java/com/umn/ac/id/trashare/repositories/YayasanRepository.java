@@ -6,6 +6,6 @@ import org.springframework.data.repository.Repository;
 
 public interface YayasanRepository extends JpaRepository<Yayasan, Integer>, Repository<Yayasan, Integer> {
 
-    Yayasan findByEmail(String email);
-    Yayasan findBySessionToken(String sessionToken);
+    Yayasan findOneByEmail(String email);
+    Yayasan findOneBySessionToken(String sessionToken);
 }

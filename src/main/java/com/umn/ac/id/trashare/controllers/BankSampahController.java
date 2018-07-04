@@ -1,5 +1,6 @@
 package com.umn.ac.id.trashare.controllers;
 
+import com.umn.ac.id.trashare.Utils.StringUtils;
 import com.umn.ac.id.trashare.beans.BankSampah;
 import com.umn.ac.id.trashare.beans.Yayasan;
 import com.umn.ac.id.trashare.repositories.BankSampahRepository;
@@ -50,7 +51,7 @@ public class BankSampahController {
         String password = body.get("password");
         String salt = BCrypt.gensalt();
         String newPassword = BCrypt.hashpw(password, salt);
-        String sessionToken = body.get("sessionToken");
+        String sessionToken = "";
         BASE64Decoder decoder = new BASE64Decoder();
         byte[] fotoProfil = null;
         try {
@@ -104,9 +105,11 @@ public class BankSampahController {
     public BankSampah loginBankSampah(@RequestBody Map<String, String> body) {
         String email = body.get("email");
         String password = body.get("password");
-        BankSampah bankSampah = bankSampahRepository.findByEmail(email);
+        BankSampah bankSampah = bankSampahRepository.findOneByEmail(email);
         if (bankSampah != null) {
             if (BCrypt.checkpw(password, bankSampah.getPassword())) {
+                bankSampah.setSessionToken(StringUtils.randomAlphaNumeric(128));
+                bankSampahRepository.save(bankSampah);
                 return bankSampah;
             }
         }

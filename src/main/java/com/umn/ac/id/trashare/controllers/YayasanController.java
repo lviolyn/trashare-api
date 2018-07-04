@@ -38,7 +38,7 @@ public class YayasanController {
         String password = body.get("password");
         String salt = BCrypt.gensalt();
         String newPassword = BCrypt.hashpw(password, salt);
-        String sessionToken = body.get("sessionToken");
+        String sessionToken = "";
         BASE64Decoder decoder = new BASE64Decoder();
         byte[] fotoProfil = null;
         try {
@@ -83,9 +83,11 @@ public class YayasanController {
     public Yayasan loginYayasan(@RequestBody Map<String, String> body) {
         String email = body.get("email");
         String password = body.get("password");
-        Yayasan yayasan = yayasanRepository.findByEmail(email);
+        Yayasan yayasan = yayasanRepository.findOneByEmail(email);
         if (yayasan != null) {
             if (BCrypt.checkpw(password, yayasan.getPassword())) {
+                yayasan.setSessionToken(StringUtils.randomAlphaNumeric(128));
+                yayasanRepository.save(yayasan);
                 return yayasan;
             }
         }

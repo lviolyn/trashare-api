@@ -6,6 +6,6 @@ import org.springframework.data.repository.Repository;
 
 public interface BankSampahRepository extends JpaRepository<BankSampah, Integer>, Repository<BankSampah, Integer> {
 
-    BankSampah findByEmail(String email);
-    BankSampah findBySessionToken(String sessionToken);
+    BankSampah findOneByEmail(String email);
+    BankSampah findOneBySessionToken(String sessionToken);
 }

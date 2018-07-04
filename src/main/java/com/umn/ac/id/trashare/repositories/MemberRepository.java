@@ -9,6 +9,6 @@ import org.springframework.data.repository.query.Param;
 
 public interface MemberRepository extends JpaRepository<Member, Integer>, Repository<Member, Integer> {
 
-    Member findByEmail(String email);
-    Member findBySessionToken(String sessionToken);
+    Member findOneByEmail(String email);
+    Member findOneBySessionToken(String sessionToken);
 }
