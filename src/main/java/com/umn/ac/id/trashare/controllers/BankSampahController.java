@@ -5,6 +5,7 @@ import com.umn.ac.id.trashare.beans.Yayasan;
 import com.umn.ac.id.trashare.repositories.BankSampahRepository;
 import com.umn.ac.id.trashare.repositories.YayasanRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.web.bind.annotation.*;
 import sun.misc.BASE64Decoder;
 
@@ -47,7 +48,8 @@ public class BankSampahController {
         String email = body.get("email");
         String deskripsiBankSampah = body.get("deskripsiBankSampah");
         String password = body.get("password");
-        String salt = body.get("salt");
+        String salt = BCrypt.gensalt();
+        String newPassword = BCrypt.hashpw(password, salt);
         String sessionToken = body.get("sessionToken");
         BASE64Decoder decoder = new BASE64Decoder();
         byte[] fotoProfil = null;
@@ -58,7 +60,7 @@ public class BankSampahController {
         }
         int idYayasan = Integer.parseInt(body.get("idYayasan"));
         Yayasan ys = yayasanRepository.getOne(idYayasan);
-        return bankSampahRepository.save(new BankSampah(namaBankSampah, namaKetua, alamat, wilayah, noTelp, email, deskripsiBankSampah, password, salt, sessionToken, fotoProfil, ys));
+        return bankSampahRepository.save(new BankSampah(namaBankSampah, namaKetua, alamat, wilayah, noTelp, email, deskripsiBankSampah, newPassword, salt, sessionToken, fotoProfil, ys));
     }
 
     @PutMapping("/bank-sampah/{id}")
@@ -72,8 +74,10 @@ public class BankSampahController {
         bankSampah.setNoTelp(body.get("noTelp"));
         bankSampah.setEmail(body.get("email"));
         bankSampah.setDeskripsiBankSampah(body.get("deskripsiBankSampah"));
-        bankSampah.setPassword(body.get("password"));
-        bankSampah.setSalt(body.get("salt"));
+        String newSalt = BCrypt.gensalt();
+        bankSampah.setSalt(newSalt);
+        String newPassword = body.get("password");
+        bankSampah.setPassword(BCrypt.hashpw(newPassword, newSalt));
         BASE64Decoder decoder = new BASE64Decoder();
         byte[] fotoProfil = null;
         try {
@@ -94,5 +98,18 @@ public class BankSampahController {
         BankSampah bankSampah = bankSampahRepository.getOne(idBankSampah);
         bankSampahRepository.delete(bankSampah);
         return true;
+    }
+
+    @PostMapping("/bank-sampah/login")
+    public BankSampah loginBankSampah(@RequestBody Map<String, String> body) {
+        String email = body.get("email");
+        String password = body.get("password");
+        BankSampah bankSampah = bankSampahRepository.findByEmail(email);
+        if (bankSampah != null) {
+            if (BCrypt.checkpw(password, bankSampah.getPassword())) {
+                return bankSampah;
+            }
+        }
+        return null;
     }
 }

@@ -5,6 +5,7 @@ import com.umn.ac.id.trashare.beans.Member;
 import com.umn.ac.id.trashare.repositories.BankSampahRepository;
 import com.umn.ac.id.trashare.repositories.MemberRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.web.bind.annotation.*;
 import sun.misc.BASE64Decoder;
 
@@ -50,7 +51,8 @@ public class MemberController {
         String noTelp = body.get("noTelp");
         String alamat = body.get("alamat");
         String password = body.get("password");
-        String salt = body.get("salt");
+        String salt = BCrypt.gensalt();
+        String newPassword = BCrypt.hashpw(password, salt);
         int poin = Integer.parseInt(body.get("poin"));
         String sessionToken = body.get("sessionToken");
         int saldo = Integer.parseInt(body.get("saldo"));
@@ -64,7 +66,7 @@ public class MemberController {
         }
         int idBankSampah = Integer.parseInt(body.get("idBankSampah"));
         BankSampah bs = bankSampahRepository.getOne(idBankSampah);
-        return memberRepository.save(new Member(namaLengkap, email, noTelp, alamat, password, salt, poin, sessionToken, saldo, fotoProfil, fotoIdentitas, bs));
+        return memberRepository.save(new Member(namaLengkap, email, noTelp, alamat, newPassword, salt, poin, sessionToken, saldo, fotoProfil, fotoIdentitas, bs));
     }
 
     @PutMapping("/member/{id}")
@@ -75,8 +77,10 @@ public class MemberController {
         member.setEmail(body.get("email"));
         member.setNoTelp(body.get("noTelp"));
         member.setAlamat(body.get("alamat"));
-        member.setPassword(body.get("password"));
-        member.setSalt(body.get("salt"));
+        String newPassword = body.get("password");
+        String newSalt = BCrypt.gensalt();
+        member.setSalt(newSalt);
+        member.setPassword(BCrypt.hashpw(newPassword, newSalt));
         member.setPoin(Integer.parseInt(body.get("poin")));
         member.setSaldo(Integer.parseInt(body.get("saldo")));
         BASE64Decoder decoder = new BASE64Decoder();
@@ -101,5 +105,18 @@ public class MemberController {
         Member member = memberRepository.getOne(id_member);
         memberRepository.delete(member);
         return true;
+    }
+
+    @PostMapping("/member/login")
+    public Member loginMember(@RequestBody Map<String, String> body) {
+        String email = body.get("email");
+        String password = body.get("password");
+        Member member = memberRepository.findByEmail(email);
+        if (member != null) {
+            if (BCrypt.checkpw(password, member.getPassword())) {
+                return member;
+            }
+        }
+        return null;
     }
 }

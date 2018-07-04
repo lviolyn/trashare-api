@@ -17,7 +17,7 @@ public class Member {
     @Column(name = "nama_lengkap", length = 50)
     private String namaLengkap;
 
-    @Column(name = "email", length = 60)
+    @Column(name = "email", length = 60, unique = true)
     private String email;
 
     @Column(name = "no_telp", length = 15)
@@ -26,16 +26,16 @@ public class Member {
     @Column(name = "alamat")
     private String alamat;
 
-    @Column(name = "password", length = 100)
+    @Column(name = "password")
     private String password;
 
-    @Column(name = "salt", length = 10)
+    @Column(name = "salt")
     private String salt;
 
     @Column(name = "poin")
     private int poin;
 
-    @Column(name = "session_token")
+    @Column(name = "session_token", unique = true)
     private String sessionToken;
 
     @Column(name = "saldo")

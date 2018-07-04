@@ -19,16 +19,16 @@ public class Yayasan {
     @Column(name = "nama_yayasan", length = 50)
     private String namaYayasan;
 
-    @Column(name = "email", length = 60)
+    @Column(name = "email", length = 60, unique = true)
     private String email;
 
     @Column(name = "no_telp", length = 15)
     private String noTelp;
 
-    @Column(name = "password", length = 100)
+    @Column(name = "password")
     private String password;
 
-    @Column(name = "salt", length = 10)
+    @Column(name = "salt")
     private String salt;
 
     @Column(name = "session_token")
