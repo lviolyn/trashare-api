@@ -1,6 +1,7 @@
 package com.umn.ac.id.trashare.beans;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import org.hibernate.validator.constraints.br.CPF;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -22,6 +23,9 @@ public class SetorSampah {
     @JoinColumn(name = "id_member")
     private Member member;
 
+    @Column(name = "nama_sampah")
+    private String namaSampah;
+
     @Column(name = "berat")
     private int berat;
 
@@ -31,9 +35,10 @@ public class SetorSampah {
     public SetorSampah() {
     }
 
-    public SetorSampah(Sampah sampah, Member member, int berat, Date tanggalSetor) {
+    public SetorSampah(Sampah sampah, Member member, String namaSampah, int berat, Date tanggalSetor) {
         this.sampah = sampah;
         this.member = member;
+        this.namaSampah = namaSampah;
         this.berat = berat;
         this.tanggalSetor = tanggalSetor;
     }
@@ -76,5 +81,13 @@ public class SetorSampah {
 
     public void setTanggalSetor(Date tanggalSetor) {
         this.tanggalSetor = tanggalSetor;
+    }
+
+    public String getNamaSampah() {
+        return namaSampah;
+    }
+
+    public void setNamaSampah(String namaSampah) {
+        this.namaSampah = namaSampah;
     }
 }

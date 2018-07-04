@@ -38,6 +38,7 @@ public class SetorSampahController {
         Integer idMember = Integer.parseInt(body.get("idMember"));
         Member member = memberRepository.getOne(idMember);
         Integer berat = Integer.parseInt(body.get("berat"));
+        String namaSampah = body.get("namaSampah");
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy");
         simpleDateFormat.setTimeZone(TimeZone.getTimeZone("UTC+7:00"));
         DateFormat dateFormat = simpleDateFormat;
@@ -48,7 +49,8 @@ public class SetorSampahController {
             e.printStackTrace();
         }
         member.setPoin(berat * 10);
+        member.setSaldo(member.getSaldo() + (berat * 5000));
         memberRepository.save(member);
-        return setorSampahRepository.save(new SetorSampah(sampah, member, berat, tanggalSetor));
+        return setorSampahRepository.save(new SetorSampah(sampah, member, namaSampah, berat, tanggalSetor));
     }
 }
