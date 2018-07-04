@@ -51,6 +51,12 @@ public class BankSampah {
     @Column(name = "foto_profil")
     private byte[] fotoProfil;
 
+    @Column(name = "latitude")
+    private double latitude;
+
+    @Column(name = "longitude")
+    private double longitude;
+
     // Banyak (Yayasan) ke 1 BS --> Banyak BS dimiliki 1 Yayasan
     @ManyToOne(targetEntity = Yayasan.class)
     @JoinColumn(name = "id_yayasan", nullable = false, referencedColumnName = "id_yayasan")
@@ -66,7 +72,7 @@ public class BankSampah {
     public BankSampah() {
     }
 
-    public BankSampah(String namaBankSampah, String namaKetua, String alamat, String wilayah, String noTelp, String email, String deskripsiBankSampah, String password, String salt, String sessionToken, byte[] fotoProfil, Yayasan idYayasan) {
+    public BankSampah(String namaBankSampah, String namaKetua, String alamat, String wilayah, String noTelp, String email, String deskripsiBankSampah, String password, String salt, String sessionToken, byte[] fotoProfil, Yayasan idYayasan, double latitude, double longitude) {
         this.namaBankSampah = namaBankSampah;
         this.namaKetua = namaKetua;
         this.alamat = alamat;
@@ -79,6 +85,8 @@ public class BankSampah {
         this.sessionToken = sessionToken;
         this.fotoProfil = fotoProfil;
         this.idYayasan = idYayasan;
+        this.latitude = latitude;
+        this.longitude = longitude;
     }
 
     // Setter
@@ -140,6 +148,14 @@ public class BankSampah {
 
     public void setKegiatans(Set<Kegiatan> kegiatans) {
         this.kegiatans = kegiatans;
+    }
+
+    public void setLatitude(double latitude) {
+        this.latitude = latitude;
+    }
+
+    public void setLongitude(double longitude) {
+        this.longitude = longitude;
     }
 
     // Getter
@@ -205,5 +221,13 @@ public class BankSampah {
     // Bank Sampah tau dia punya event apa aja
     public Set<Kegiatan> getKegiatans() {
         return kegiatans;
+    }
+
+    public double getLatitude() {
+        return latitude;
+    }
+
+    public double getLongitude() {
+        return longitude;
     }
 }
