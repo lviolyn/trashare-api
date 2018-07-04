@@ -1,12 +1,16 @@
 package com.umn.ac.id.trashare.controllers;
 
+import com.umn.ac.id.trashare.Utils.StringUtils;
 import com.umn.ac.id.trashare.beans.BankSampah;
 import com.umn.ac.id.trashare.beans.Member;
 import com.umn.ac.id.trashare.repositories.BankSampahRepository;
 import com.umn.ac.id.trashare.repositories.MemberRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.web.bind.annotation.*;
+import sun.misc.BASE64Decoder;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
@@ -48,18 +52,25 @@ public class MemberController {
         String noTelp = body.get("noTelp");
         String alamat = body.get("alamat");
         String password = body.get("password");
-        String salt = body.get("salt");
+        String salt = BCrypt.gensalt();
+        String newPassword = BCrypt.hashpw(password, salt);
         int poin = Integer.parseInt(body.get("poin"));
-        String sessionToken = body.get("sessionToken");
+        String sessionToken = "";
         int saldo = Integer.parseInt(body.get("saldo"));
-        String fotoProfil = body.get("fotoProfil");
-        String fotoIdentitas = body.get("fotoIdentitas");
+        BASE64Decoder decoder = new BASE64Decoder();
+        byte[] fotoProfil = null, fotoIdentitas = null;
+        try {
+            fotoProfil = decoder.decodeBuffer(body.get("fotoProfil"));
+            fotoIdentitas = decoder.decodeBuffer(body.get("fotoIdentitas"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         int idBankSampah = Integer.parseInt(body.get("idBankSampah"));
         BankSampah bs = bankSampahRepository.getOne(idBankSampah);
-        return memberRepository.save(new Member(namaLengkap, email, noTelp, alamat, password, salt, poin, sessionToken, saldo, fotoProfil, fotoIdentitas, bs));
+        return memberRepository.save(new Member(namaLengkap, email, noTelp, alamat, newPassword, salt, poin, sessionToken, saldo, fotoProfil, fotoIdentitas, bs));
     }
 
-    @PutMapping("/member/id")
+    @PutMapping("/member/{id}")
     public Member updateMember(@PathVariable String id, @RequestBody Map<String, String> body){
         int idMember = Integer.parseInt(id);
         Member member = memberRepository.getOne(idMember);
@@ -67,23 +78,48 @@ public class MemberController {
         member.setEmail(body.get("email"));
         member.setNoTelp(body.get("noTelp"));
         member.setAlamat(body.get("alamat"));
-        member.setPassword(body.get("password"));
-        member.setSalt(body.get("salt"));
+        String newPassword = body.get("password");
+        String newSalt = BCrypt.gensalt();
+        member.setSalt(newSalt);
+        member.setPassword(BCrypt.hashpw(newPassword, newSalt));
         member.setPoin(Integer.parseInt(body.get("poin")));
         member.setSaldo(Integer.parseInt(body.get("saldo")));
-        member.setFotoProfil(body.get("fotoProfil"));
-        member.setFotoIdentitas(body.get("fotoIdentitas"));
+        BASE64Decoder decoder = new BASE64Decoder();
+        byte[] fotoProfil = null, fotoIdentitas = null;
+        try {
+            fotoProfil = decoder.decodeBuffer(body.get("fotoProfil"));
+            fotoIdentitas = decoder.decodeBuffer(body.get("fotoIdentitas"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        member.setFotoProfil(fotoProfil);
+        member.setFotoIdentitas(fotoIdentitas);
         int idBankSampah = Integer.parseInt(body.get("idBankSampah"));
         BankSampah bs = bankSampahRepository.getOne(idBankSampah);
         member.setIdBankSampah(bs);
         return memberRepository.save(member);
     }
 
-    @DeleteMapping
+    @DeleteMapping("/member/{id}")
     public boolean deleteMember(@PathVariable String id){
         int id_member = Integer.parseInt(id);
         Member member = memberRepository.getOne(id_member);
         memberRepository.delete(member);
         return true;
+    }
+
+    @PostMapping("/member/login")
+    public Member loginMember(@RequestBody Map<String, String> body) {
+        String email = body.get("email");
+        String password = body.get("password");
+        Member member = memberRepository.findOneByEmail(email);
+        if (member != null) {
+            if (BCrypt.checkpw(password, member.getPassword())) {
+                member.setSessionToken(StringUtils.randomAlphaNumeric(128));
+                memberRepository.save(member);
+                return member;
+            }
+        }
+        return null;
     }
 }

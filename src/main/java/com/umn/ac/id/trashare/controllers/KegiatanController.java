@@ -71,7 +71,7 @@ public class KegiatanController {
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        //kegiatan.setTanggalKegiatan(new Date(body.get("tanggalKegiatan")));
+        kegiatan.setTanggalKegiatan(tanggalKegiatan);
         int idBankSampah = Integer.parseInt(body.get("idBankSampah"));
         BankSampah bs = bankSampahRepository.getOne(idBankSampah);
         kegiatan.setIdBankSampah(bs);

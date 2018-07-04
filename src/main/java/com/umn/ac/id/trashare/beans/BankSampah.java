@@ -33,23 +33,23 @@ public class BankSampah {
     @Column(name = "no_telp", length = 15)
     private String noTelp;
 
-    @Column(name = "email", length = 60)
+    @Column(name = "email", length = 60, unique = true)
     private String email;
 
     @Column(name = "deskripsi_bank_sampah")
     private String deskripsiBankSampah;
 
-    @Column(name = "password", length = 100)
+    @Column(name = "password")
     private String password;
 
-    @Column(name = "salt", length = 10)
+    @Column(name = "salt")
     private String salt;
 
-    @Column(name = "session_token", length = 35)
+    @Column(name = "session_token", unique = true)
     private String sessionToken;
 
     @Column(name = "foto_profil")
-    private String fotoProfil;
+    private byte[] fotoProfil;
 
     // Banyak (Yayasan) ke 1 BS --> Banyak BS dimiliki 1 Yayasan
     @ManyToOne(targetEntity = Yayasan.class)
@@ -66,7 +66,7 @@ public class BankSampah {
     public BankSampah() {
     }
 
-    public BankSampah(String namaBankSampah, String namaKetua, String alamat, String wilayah, String noTelp, String email, String deskripsiBankSampah, String password, String salt, String sessionToken, String fotoProfil, Yayasan idYayasan) {
+    public BankSampah(String namaBankSampah, String namaKetua, String alamat, String wilayah, String noTelp, String email, String deskripsiBankSampah, String password, String salt, String sessionToken, byte[] fotoProfil, Yayasan idYayasan) {
         this.namaBankSampah = namaBankSampah;
         this.namaKetua = namaKetua;
         this.alamat = alamat;
@@ -126,7 +126,7 @@ public class BankSampah {
         this.sessionToken = sessionToken;
     }
 
-    public void setFotoProfil(String fotoProfil) {
+    public void setFotoProfil(byte[] fotoProfil) {
         this.fotoProfil = fotoProfil;
     }
 
@@ -187,7 +187,7 @@ public class BankSampah {
         return sessionToken;
     }
 
-    public String getFotoProfil() {
+    public byte[] getFotoProfil() {
         return fotoProfil;
     }
 
